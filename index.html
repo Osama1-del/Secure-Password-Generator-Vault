@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد كلمات المرور الآمنة | Raqeem Stark</title>
+    <!-- خط Cairo العصري -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- مكتبة الأيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- إطار العمل Tailwind CSS للتصميم المتجاوب وسريع الأداء -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandDark: '#0f172a',
+                        brandCard: '#1e293b',
+                        brandSurface: '#090d16',
+                        brandAccent: '#38bdf8',
+                        brandHover: '#0ea5e9'
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-brandDark text-slate-100 font-cairo min-h-screen flex flex-col items-center justify-center p-4 selection:bg-brandAccent selection:text-brandDark">
+
+    <!-- حاوية التطبيق الرئيسية -->
+    <div class="w-full max-w-lg bg-brandCard border border-slate-700/60 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden backdrop-blur-md">
+        
+        <!-- الترويسة والعنوان -->
+        <div class="bg-brandSurface p-6 text-center border-b border-slate-700/60">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brandAccent/10 text-brandAccent mb-3 shadow-inner">
+                <i class="fa-solid fa-shield-halved text-2xl"></i>
+            </div>
+            <h1 class="text-xl md:text-2xl font-black text-brandAccent tracking-wide">مولد كلمات المرور الآمنة</h1>
+            <p class="text-slate-400 text-xs md:text-sm mt-1">حصن حساباتك بكلمات مرور شديدة التعقيد والتشفير</p>
+        </div>
+
+        <!-- محتوى التطبيق -->
+        <div class="p-6 md:p-8 space-y-6">
+            
+            <!-- حقل عرض كلمة المرور وأزرار التحكم السريع -->
+            <div class="relative bg-brandSurface border-2 border-slate-700 rounded-xl p-3 md:p-4 flex items-center justify-between gap-3 focus-within:border-brandAccent transition-all duration-300 shadow-inner">
+                <input type="text" id="passwordOutput" readonly 
+                    class="bg-transparent border-none text-slate-100 text-lg md:text-xl font-mono tracking-wider w-full outline-none select-all overflow-x-auto" 
+                    placeholder="كلمة المرور ستظهر هنا...">
+                <div class="flex items-center gap-2 shrink-0">
+                    <button id="copyBtn" title="نسخ للحافظة" class="w-10 h-10 bg-slate-800 hover:bg-brandAccent hover:text-brandDark text-slate-200 rounded-lg flex items-center justify-center transition-all duration-200 active:scale-95 shadow-md">
+                        <i class="fa-regular fa-copy text-base"></i>
+                    </button>
+                    <button id="refreshBtn" title="توليد جديد" class="w-10 h-10 bg-slate-800 hover:bg-brandAccent hover:text-brandDark text-slate-200 rounded-lg flex items-center justify-center transition-all duration-200 active:scale-95 shadow-md">
+                        <i class="fa-solid fa-rotate text-base"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- مؤشر قوة كلمة المرور الديناميكي -->
+            <div class="bg-brandSurface/60 p-4 rounded-xl border border-slate-800">
+                <div class="flex justify-between items-center text-xs md:text-sm mb-2 font-semibold">
+                    <span class="text-slate-400">مستوى الأمان:</span>
+                    <span id="strengthText" class="text-rose-500 font-bold">ضعيف جداً</span>
+                </div>
+                <div class="grid grid-cols-4 gap-1.5 h-2">
+                    <div id="bar1" class="bg-slate-700 rounded-full transition-all duration-300"></div>
+                    <div id="bar2" class="bg-slate-700 rounded-full transition-all duration-300"></div>
+                    <div id="bar3" class="bg-slate-700 rounded-full transition-all duration-300"></div>
+                    <div id="bar4" class="bg-slate-700 rounded-full transition-all duration-300"></div>
+                </div>
+            </div>
+
+            <!-- إعدادات وتخصيص كلمة المرور -->
+            <div class="space-y-4">
+                <!-- شريط تمرير الطول -->
+                <div>
+                    <div class="flex justify-between text-sm font-semibold mb-2">
+                        <span class="text-slate-300">طول كلمة المرور:</span>
+                        <span id="lengthVal" class="text-brandAccent bg-brandAccent/10 px-2.5 py-0.5 rounded-md font-mono">16</span>
+                    </div>
+                    <input type="range" id="lengthRange" min="6" max="32" value="16" 
+                        class="w-full accent-brandAccent bg-slate-700 h-2 rounded-lg cursor-pointer">
+                </div>
+
+                <!-- خيارات المحارف -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                    <label class="flex items-center gap-3 bg-brandSurface p-3 rounded-xl border border-slate-800 hover:border-slate-700 cursor-pointer transition-all select-none">
+                        <input type="checkbox" id="uppercase" checked class="w-4 h-4 accent-brandAccent rounded cursor-pointer">
+                        <span class="text-sm font-medium text-slate-300">أحرف كبيرة (A-Z)</span>
+                    </label>
+                    <label class="flex items-center gap-3 bg-brandSurface p-3 rounded-xl border border-slate-800 hover:border-slate-700 cursor-pointer transition-all select-none">
+                        <input type="checkbox" id="lowercase" checked class="w-4 h-4 accent-brandAccent rounded cursor-pointer">
+                        <span class="text-sm font-medium text-slate-300">أحرف صغيرة (a-z)</span>
+                    </label>
+                    <label class="flex items-center gap-3 bg-brandSurface p-3 rounded-xl border border-slate-800 hover:border-slate-700 cursor-pointer transition-all select-none">
+                        <input type="checkbox" id="numbers" checked class="w-4 h-4 accent-brandAccent rounded cursor-pointer">
+                        <span class="text-sm font-medium text-slate-300">أرقام (0-9)</span>
+                    </label>
+                    <label class="flex items-center gap-3 bg-brandSurface p-3 rounded-xl border border-slate-800 hover:border-slate-700 cursor-pointer transition-all select-none">
+                        <input type="checkbox" id="symbols" checked class="w-4 h-4 accent-brandAccent rounded cursor-pointer">
+                        <span class="text-sm font-medium text-slate-300">رموز خاصة (!@#$)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- زر التوليد الرئيسي -->
+            <button id="generateBtn" class="w-full bg-brandAccent hover:bg-brandHover text-brandDark font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-brandAccent/20 flex items-center justify-center gap-2 transition-all duration-300 active:scale-[0.98]">
+                <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+                <span>توليد كلمة مرور جديدة</span>
+            </button>
+        </div>
+
+        <!-- تذييل الصفحة والعلامة التجارية -->
+        <div class="bg-brandSurface/80 py-3 text-center border-t border-slate-800 text-xs text-slate-500">
+            صُمم الأمان بواسطة <span class="text-brandAccent font-bold">Raqeem Stark</span> &copy; 2026
+        </div>
+    </div>
+
+    <!-- نافذة إشعار النسخ المنبثقة (Toast Notification) -->
+    <div id="toast" class="fixed bottom-6 bg-emerald-500 text-white font-bold py-2.5 px-6 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-2 z-50">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>تم نسخ كلمة المرور إلى الحافظة بنجاح!</span>
+    </div>
+
+    <script>
+        // تعريف العناصر والمتغيرات البرمجية
+        const elements = {
+            output: document.getElementById('passwordOutput'),
+            copyBtn: document.getElementById('copyBtn'),
+            refreshBtn: document.getElementById('refreshBtn'),
+            generateBtn: document.getElementById('generateBtn'),
+            lengthRange: document.getElementById('lengthRange'),
+            lengthVal: document.getElementById('lengthVal'),
+            uppercase: document.getElementById('uppercase'),
+            lowercase: document.getElementById('lowercase'),
+            numbers: document.getElementById('numbers'),
+            symbols: document.getElementById('symbols'),
+            strengthText: document.getElementById('strengthText'),
+            toast: document.getElementById('toast'),
+            bars: [
+                document.getElementById('bar1'),
+                document.getElementById('bar2'),
+                document.getElementById('bar3'),
+                document.getElementById('bar4')
+            ]
+        };
+
+        const charSets = {
+            upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            lower: 'abcdefghijklmnopqrstuvwxyz',
+            nums: '0123456789',
+            syms: '!@#$%^&*()_+-=[]{}|;:,.<>?'
+        };
+
+        // تحديث قيمة طول كلمة المرور عند تحريك شريط التمرير
+        elements.lengthRange.addEventListener('input', () => {
+            elements.lengthVal.textContent = elements.lengthRange.value;
+            generatePassword();
+        });
+
+        // دالة توليد كلمة المرور بناءً على تفضيلات المستخدم
+        function generatePassword() {
+            let validChars = '';
+            if (elements.uppercase.checked) validChars += charSets.upper;
+            if (elements.lowercase.checked) validChars += charSets.lower;
+            if (elements.numbers.checked) validChars += charSets.nums;
+            if (elements.symbols.checked) validChars += charSets.syms;
+
+            if (validChars === '') {
+                elements.output.value = 'الرجاء اختيار خيار واحد على الأقل!';
+                resetStrengthMeter();
+                return;
+            }
+
+            let password = '';
+            const length = parseInt(elements.lengthRange.value);
+            
+            // استخدام التشفير الآمن للتوليد العشوائي (crypto.getRandomValues بدلاً من Math.random العشوائي البحت للأمان العالي)
+            const array = new Uint32Array(length);
+            window.crypto.getRandomValues(array);
+            
+            for (let i = 0; i < length; i++) {
+                password += validChars[array[i] % validChars.length];
+            }
+
+            elements.output.value = password;
+            evaluatePasswordStrength(password);
+        }
+
+        // دالة تقييم قوة كلمة المرور وتحديث الأشرطة التفاعلية
+        function evaluatePasswordStrength(pwd) {
+            let score = 0;
+            if (pwd.length >= 8) score++;
+            if (pwd.length >= 12) score++;
+            if (pwd.length >= 16) score++;
+            if (/[A-Z]/.test(pwd) && /[a-z]/.test(pwd)) score++;
+            if (/[0-9]/.test(pwd)) score++;
+            if (/[^A-Za-z0-9]/.test(pwd)) score++;
+
+            // خريطة مستويات الأمان
+            const levels = [
+                { text: 'ضعيف جداً', color: '#ef4444', activeBars: 1 },
+                { text: 'ضعيف', color: '#f59e0b', activeBars: 2 },
+                { text: 'متوسط الأمان', color: '#38bdf8', activeBars: 3 },
+                { text: 'آمن وقوي جداً', color: '#22c55e', activeBars: 4 }
+            ];
+
+            let levelIndex = 0;
+            if (score <= 2) levelIndex = 0;
+            else if (score <= 3) levelIndex = 1;
+            else if (score <= 4) levelIndex = 2;
+            else levelIndex = 3;
+
+            // تعديل ديناميكي بناءً على الطول الفعلي أيضاً
+            if (pwd.length < 8) levelIndex = 0;
+
+            const currentLevel = levels[levelIndex];
+            elements.strengthText.textContent = currentLevel.text;
+            elements.strengthText.style.color = currentLevel.color;
+
+            elements.bars.forEach((bar, index) => {
+                if (index < currentLevel.activeBars) {
+                    bar.style.backgroundColor = currentLevel.color;
+                    bar.style.boxShadow = `0 0 10px ${currentLevel.color}66`;
+                } else {
+                    bar.style.backgroundColor = '#334155';
+                    bar.style.boxShadow = 'none';
+                }
+            });
+        }
+
+        function resetStrengthMeter() {
+            elements.strengthText.textContent = 'غير متوفر';
+            elements.strengthText.style.color = '#94a3b8';
+            elements.bars.forEach(bar => {
+                bar.style.backgroundColor = '#334155';
+                bar.style.boxShadow = 'none';
+            });
+        }
+
+        // دالة نسخ كلمة المرور مع الحافظة وإظهار تنبيه الـ Toast
+        function copyPasswordToClipboard() {
+            if (!elements.output.value || elements.output.value.includes('الرجاء')) return;
+
+            // استخدام طريقة آمنة ومتوافقة مع مختلف المتصفحات والإطارات
+            const textarea = document.createElement('textarea');
+            textarea.value = elements.output.value;
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToastMessage();
+            } catch (err) {
+                console.error('فشل النسخ:', err);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function showToastMessage() {
+            elements.toast.classList.remove('translate-y-20', 'opacity-0');
+            elements.toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                elements.toast.classList.remove('translate-y-0', 'opacity-100');
+                elements.toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        // ربط الأحداث بمكونات الواجهة
+        elements.generateBtn.addEventListener('click', generatePassword);
+        elements.refreshBtn.addEventListener('click', generatePassword);
+        elements.copyBtn.addEventListener('click', copyPasswordToClipboard);
+
+        [elements.uppercase, elements.lowercase, elements.numbers, elements.symbols].forEach(checkbox => {
+            checkbox.addEventListener('change', generatePassword);
+        });
+
+        // توليد كلمة مرور أولية عند تحميل الصفحة تلقائياً
+        window.onload = () => {
+            generatePassword();
+        };
+    </script>
+</body>
+</html>
